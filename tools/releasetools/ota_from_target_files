@@ -569,7 +569,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   recovery_mount_options = OPTIONS.info_dict.get("recovery_mount_options")
 
   system_items = ItemSet("system", "META/filesystem_config.txt")
-  script.ShowProgress(system_progress, 0)
+  script.ShowProgress(0.300000, 0)
 
   if block_based:
     # Full OTA is done as an "incremental" against an empty source
@@ -629,7 +629,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   common.ZipWriteStr(output_zip, "boot.img", boot_img.data)
 
   if OPTIONS.backuptool:
-    script.SetProgress(0.800000)
+    script.SetProgress(0.500000)
     if block_based:
       script.Mount("/system")
     script.RunBackup("restore")
