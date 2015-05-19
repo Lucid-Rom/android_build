@@ -358,7 +358,7 @@ class EdifyGenerator(object):
 
   def Unmount(self, mount_point):
     """Unmount the partiiton with the given mount_point."""
-    self.script.append('unmount("/system");')
+    self.script.append('unmount("%s");' % mount_point)
 
   def UnmountAll(self):
     for p in sorted(self.mounts):
