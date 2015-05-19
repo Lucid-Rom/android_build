@@ -210,7 +210,7 @@ class EdifyGenerator(object):
 
   def Mount(self, mount_point, mount_options_by_format=""):
     """Mount the partition with the given mount_point."""
-    self.script.append('run_program("/sbin/busybox", "mount", "/system");')
+    self.script.append('run_program("/sbin/busybox", "mount", "%s");' % mount_point)
 
   def UnpackPackageDir(self, src, dst):
     """Unpack a given directory from the OTA package into the given
