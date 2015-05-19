@@ -149,6 +149,31 @@ class EdifyGenerator(object):
     self.script.append('run_program("/sbin/busybox", "unzip", "/tmp/supersu/supersu.zip", "META-INF/com/google/android/*", "-d", "/tmp/supersu");')
     self.script.append('run_program("/sbin/busybox", "sh", "/tmp/supersu/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/supersu/supersu.zip");')
   
+  def DeleteRecursive(self, dir1, dir2):
+    self.script.append('delete_recursive("%s", "%s");' % (dir1, dir2))
+  
+  def ExtractUKMZip(self):
+    self.script.append('run_program("/sbin/busybox", "unzip", "SYSTEM/addon.d/UKM.zip", "-d", "data");')
+    self.script.append('package_extract_dir("data", "/data");')
+  
+  def InstallUKM(self):
+    self.script.append('run_program("/sbin/sh", "-c", "mkdir /system/etc/init.d");')
+    self.script.append('run_program("/sbin/sh", "-c", "mkdir /system/addon.d");')
+    self.script.append('set_perm_recursive(0, 0, 0755, 0755, "/system/etc/init.d");')
+    self.script.append('set_perm_recursive(0, 0, 0755, 0755, "/system/addon.d");')
+    self.script.append('package_extract_file("data/UKM/uci", "/system/xbin/uci");')
+    self.script.append('package_extract_file("data/UKM/UKM", "/system/etc/init.d/UKM");')
+    self.script.append('package_extract_file("data/UKM/UKM.sh", "/system/addon.d/UKM.sh");')
+  
+  def SetUKMPerms(self):
+    self.script.append('set_perm_recursive(0, 0, 0755, 0755, "/data/UKM");')
+    self.script.append('set_perm(0, 0, 0755, "/system/xbin/uci");')
+    self.script.append('set_perm(0, 0, 0755, "/system/etc/init.d/UKM");')
+    self.script.append('set_perm(0, 0, 0755, "/system/addon.d/UKM.sh");')
+  
+  def InstallCustomKernel(self):
+    self.script.append('package_extract_file("boot.img", "/dev/block/platform/msm_sdcc.1/by-name/boot");')
+  
   def ShowProgress(self, frac, dur):
     """Update the progress bar, advancing it over 'frac' over the next
     'dur' seconds.  'dur' may be zero to advance it via SetProgress
