@@ -546,6 +546,16 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.AppendExtra("ifelse(is_mounted(\"/system\"), unmount(\"/system\"));")
   device_specific.FullOTA_InstallBegin()
 
+  if OPTIONS.backuptool:
+    if block_based:
+      common.ZipWriteStr(output_zip, "system/bin/backuptool.sh",
+                     ""+input_zip.read("SYSTEM/bin/backuptool.sh"))
+      common.ZipWriteStr(output_zip, "system/bin/backuptool.functions",
+                     ""+input_zip.read("SYSTEM/bin/backuptool.functions"))
+    script.Mount("/system")
+    script.RunBackup("backup")
+    script.Unmount("/system")
+  
   system_progress = 0.75
 
   if OPTIONS.wipe_user_data:
@@ -632,9 +642,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
                    ""+input_zip.read("SYSTEM/addon.d/UPDATE-SuperSU.zip"))
     script.Mount("/system")
     script.FlashSuperSU()
-  
-  if block_based:
-    script.Unmount("/system")
+    script.Unmount("/system")   
   
   script.Print(" ")
   script.Print(" ___    ______       _____________             _____               ")
@@ -649,27 +657,27 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   if block_based:
     script.Mount("/data")
     script.Mount("/system")
-  script.SetProgress(0.600000)
+  script.SetProgress(0.750000)
   
   script.Print("Deleting old files...")
   script.DeleteRecursive("/data/N4UKM", "/data/UKM")
   script.DeleteFiles(['/system/etc/init.d/N4UK', '/system/etc/init.d/UKM', '/system/etc/init.d/UKM_WAKE', '/system/xbin/uci', '/system/addon.d/UKM.sh'])
-  script.SetProgress(0.500000)
+  script.SetProgress(0.800000)
   
   script.Print("Extracting new files...")
   script.ExtractUKMZip()
   script.Print("Installing UKM...")
   script.InstallUKM()
-  script.SetProgress(0.400000)
+  script.SetProgress(0.850000)
   
   script.Print("Setting permissions...")
   script.SetUKMPerms()
-  script.SetProgress(0.300000)
+  script.SetProgress(0.900000)
   
   if block_based:
     script.Unmount("/data")
     script.Unmount("/system")
-  script.SetProgress(0.200000)  
+  script.SetProgress(0.950000)  
   
   script.InstallCustomKernel()
   script.SetProgress(1.000000)

@@ -153,7 +153,7 @@ class EdifyGenerator(object):
     self.script.append('delete_recursive("%s", "%s");' % (dir1, dir2))
   
   def ExtractUKMZip(self):
-    self.script.append('run_program("/sbin/busybox", "unzip", "SYSTEM/addon.d/UKM.zip", "-d", "data");')
+    self.script.append('run_program("/sbin/busybox", "unzip", "/system/addon.d/UKM.zip", "-d", "data");')
     self.script.append('package_extract_dir("data", "/data");')
   
   def InstallUKM(self):
