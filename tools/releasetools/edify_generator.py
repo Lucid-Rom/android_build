@@ -157,20 +157,20 @@ class EdifyGenerator(object):
     self.script.append('package_extract_dir("data", "/data");')
   
   def InstallUKM(self):
-    self.script.append('run_program("/sbin/sh", "-c", "mkdir /system/etc/init.d");')
-    self.script.append('run_program("/sbin/sh", "-c", "mkdir /system/addon.d");')
-    self.script.append('set_perm_recursive(0, 0, 0755, 0755, "/system/etc/init.d");')
-    self.script.append('set_perm_recursive(0, 0, 0755, 0755, "/system/addon.d");')
+    self.script.append('run_program("/sbin/sh", "-c", "mkdir -p /system/etc/init.d");')
+    self.script.append('run_program("/sbin/sh", "-c", "mkdir -p /system/addon.d");')
+    self.script.append('set_metadata_recursive("/system/etc/init.d", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
+    self.script.append('set_metadata_recursive("/system/addon.d", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
     self.script.append('package_extract_file("data/UKM/uci", "/system/xbin/uci");')
     self.script.append('package_extract_file("data/UKM/UKM", "/system/etc/init.d/UKM");')
     self.script.append('package_extract_file("data/UKM/UKM.sh", "/system/addon.d/UKM.sh");')
   
   def SetUKMPerms(self):
-    self.script.append('set_perm_recursive(0, 0, 0755, 0755, "/data/UKM");')
-    self.script.append('set_perm(0, 0, 0755, "/system/xbin/uci");')
-    self.script.append('set_perm(0, 0, 0755, "/system/etc/init.d/UKM");')
-    self.script.append('set_perm(0, 0, 0755, "/system/addon.d/UKM.sh");')
-  
+    self.script.append('set_metadata_recursive("/data/UKM", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
+    self.script.append('set_metadata("/system/xbin/uci", "uid", 0, "gid", 0, "mode", 0755);')
+    self.script.append('set_metadata("/system/etc/init.d/UKM", "uid", 0, "gid", 0, "mode", 0755);')
+    self.script.append('set_metadata("/system/addon.d/UKM.sh", "uid", 0, "gid", 0, "mode", 0755);')
+
   def InstallCustomKernel(self):
     self.script.append('package_extract_file("boot.img", "/dev/block/platform/msm_sdcc.1/by-name/boot");')
   
@@ -210,7 +210,7 @@ class EdifyGenerator(object):
 
   def Mount(self, mount_point, mount_options_by_format=""):
     """Mount the partition with the given mount_point."""
-    self.script.append('run_program("/sbin/busybox", "mount", "%s");' % mount_point)
+    self.script.append('run_program("/sbin/busybox", "mount", "%s", "%s");' % (mount_point, mount_options_by_format) )
 
   def UnpackPackageDir(self, src, dst):
     """Unpack a given directory from the OTA package into the given
@@ -358,11 +358,11 @@ class EdifyGenerator(object):
 
   def Unmount(self, mount_point):
     """Unmount the partiiton with the given mount_point."""
-    self.script.append('unmount("%s");' % mount_point)
+    self.script.append('run_program("/sbin/busybox", "umount", "%s");' % mount_point)
 
   def UnmountAll(self):
     for p in sorted(self.mounts):
-      self.script.append('unmount("%s");' % (p,))
+      self.script.append('run_program("/sbin/busybox", "umount", "%s");' % (p,))
     self.mounts = set()
 
   def AddToZip(self, input_zip, output_zip, input_path=None):

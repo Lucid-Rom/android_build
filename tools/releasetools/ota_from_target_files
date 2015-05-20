@@ -679,6 +679,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     script.Unmount("/system")
   script.SetProgress(0.950000)  
   
+  script.Print("Flashing kernel image...")
   script.InstallCustomKernel()
   script.SetProgress(1.000000)
   
