@@ -153,17 +153,18 @@ class EdifyGenerator(object):
     self.script.append('delete_recursive("%s", "%s");' % (dir1, dir2))
   
   def ExtractUKMZip(self):
-    self.script.append('run_program("/sbin/busybox", "unzip", "/system/addon.d/UKM.zip", "-d", "data");')
-    self.script.append('package_extract_dir("data", "/data");')
+    self.script.append('package_extract_dir("data", "/tmp/UKM");')
+    self.script.append('run_program("/sbin/busybox", "unzip", "/tmp/UKM/UKM.zip", "-d", "/tmp/UKM");')
+    self.script.append('package_extract_dir("/tmp/UKM", "/data");')
   
   def InstallUKM(self):
     self.script.append('run_program("/sbin/sh", "-c", "mkdir -p /system/etc/init.d");')
     self.script.append('run_program("/sbin/sh", "-c", "mkdir -p /system/addon.d");')
     self.script.append('set_metadata_recursive("/system/etc/init.d", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
     self.script.append('set_metadata_recursive("/system/addon.d", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
-    self.script.append('package_extract_file("data/UKM/uci", "/system/xbin/uci");')
-    self.script.append('package_extract_file("data/UKM/UKM", "/system/etc/init.d/UKM");')
-    self.script.append('package_extract_file("data/UKM/UKM.sh", "/system/addon.d/UKM.sh");')
+    self.script.append('package_extract_file("/data/UKM/uci", "/system/xbin/uci");')
+    self.script.append('package_extract_file("/data/UKM/UKM", "/system/etc/init.d/UKM");')
+    self.script.append('package_extract_file("/data/UKM/UKM.sh", "/system/addon.d/UKM.sh");')
   
   def SetUKMPerms(self):
     self.script.append('set_metadata_recursive("/data/UKM", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
