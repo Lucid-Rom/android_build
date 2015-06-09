@@ -150,13 +150,10 @@ class EdifyGenerator(object):
     self.script.append('run_program("/sbin/busybox", "sh", "/tmp/supersu/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/supersu/supersu.zip");')
   
   def DeleteRecursive(self, dir1, dir2):
-    self.script.append('delete_recursive("%s", "%s");' % (dir1, dir2))
-  
-  def ExtractUKMZip(self):
-    self.script.append('run_program("/sbin/busybox", "unzip", "UKM.zip", "-d", "data");')
-    self.script.append('package_extract_dir("data", "/data");')
+    self.script.append('delete_recursive("%s", "%s");' % (dir1, dir2))    
   
   def InstallUKM(self):
+    self.script.append('package_extract_dir("data", "/data");')
     self.script.append('run_program("/sbin/sh", "-c", "mkdir -p /system/etc/init.d");')
     self.script.append('run_program("/sbin/sh", "-c", "mkdir -p /system/addon.d");')
     self.script.append('set_metadata_recursive("/system/etc/init.d", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
