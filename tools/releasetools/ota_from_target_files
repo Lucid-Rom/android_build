@@ -655,8 +655,8 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.SetProgress(0.700000)
   script.Print("Mounting filesystems...")
   if block_based:
-    script.Mount("/data")
     script.Mount("/system")
+    script.Mount("/data")
   script.SetProgress(0.750000)
   
   script.Print("Deleting old files...")
@@ -665,7 +665,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.SetProgress(0.800000)
   
   script.Print("Extracting new files...")
-  common.ZipWriteStr(output_zip, "data/UKM.zip",
+  common.ZipWriteStr(output_zip, "UKM.zip",
                   ""+input_zip.read("SYSTEM/addon.d/UKM.zip"))
   script.ExtractUKMZip()
   
