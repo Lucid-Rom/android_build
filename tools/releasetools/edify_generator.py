@@ -163,7 +163,7 @@ class EdifyGenerator(object):
     self.script.append('package_extract_file("data/UKM/UKM.sh", "/system/addon.d/UKM.sh");')
   
   def SetUKMPerms(self):
-    self.script.append('set_metadata_recursive("/data/UKM", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
+    self.script.append('set_metadata_recursive("/data/UKM", "uid", 0, "gid", 0, "dmode", 0755, "fmode", 0755, "selabel", "u:object_r:system_file:s0");')
     self.script.append('set_metadata("/system/xbin/uci", "uid", 0, "gid", 0, "mode", 0755);')
     self.script.append('set_metadata("/system/etc/init.d/UKM", "uid", 0, "gid", 0, "mode", 0755);')
     self.script.append('set_metadata("/system/addon.d/UKM.sh", "uid", 0, "gid", 0, "mode", 0755);')
