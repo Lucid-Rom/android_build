@@ -30,7 +30,6 @@ PRODUCT_PACKAGES += \
     DocumentsUI \
     DownloadProviderUi \
     Email \
-    Exchange2 \
     ExternalStorageProvider \
     FusedLocation \
     InputDevices \
